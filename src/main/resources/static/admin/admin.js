@@ -8,4 +8,16 @@ angular.module('app').controller('adminController', function ($scope, $http) {
                 alert('Добавлен новый продукт');
             });
     };
+
+    $scope.getCategoriesList = function () {
+        $http({
+            url: contextPath + '/api/v1/categories',
+            method: 'GET'
+        })
+            .then(function (response) {
+                $scope.CategoriesList = response.data;
+            });
+    };
+
+    $scope.getCategoriesList();
 });

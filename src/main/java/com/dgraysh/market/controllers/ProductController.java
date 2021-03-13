@@ -1,8 +1,10 @@
 package com.dgraysh.market.controllers;
 
+import com.dgraysh.market.dto.NewProductDto;
 import com.dgraysh.market.dto.ProductDto;
 import com.dgraysh.market.entities.Product;
 import com.dgraysh.market.exceptions.ResourceNotFoundException;
+import com.dgraysh.market.services.CategoryService;
 import com.dgraysh.market.services.ProductService;
 import com.dgraysh.market.utils.ProductFilter;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @GetMapping(produces = "application/json")
     public Page<ProductDto> getAllProducts(@RequestParam(defaultValue = "1", name = "p") Integer page,
@@ -39,9 +42,10 @@ public class ProductController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public Product createProduct(@RequestBody Product p) {
-        p.setId(null);
-        return productService.saveOrUpdate(p);
+    public Product createProduct(@RequestBody NewProductDto p) {
+        Product product = new Product(null, p.getTitle(), p.getPrice(), categoryService.findById(p.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("Unable to create new product, category with id: '%s' not found", p.getCategoryId()))));
+        return productService.saveOrUpdate(product);
     }
 
     @PutMapping(consumes = "application/json", produces = "application/json")

@@ -42,5 +42,19 @@ angular.module('app').controller('cartController', function ($scope, $http) {
             });
     };
 
+    $scope.createOrder = function () {
+        $http({
+            url: contextPath + '/api/v1/orders',
+            method: 'POST',
+            params: {
+                address: $scope.ord ? $scope.ord.address : null
+            }
+        })
+            .then(function (response) {
+                alert('Заказ оформлен');
+                $scope.cartContentRequest();
+            });
+    }
+
     $scope.cartContentRequest();
 });
