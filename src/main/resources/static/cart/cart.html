@@ -1,6 +1,7 @@
 <div>
     <h3>Корзина</h3>
-    <table class="table table-hover" cellpadding="0" cellspacing="0">
+    <span ng-if="cart.items.length == 0">Корзина пуста</span>
+    <table class="table table-hover" cellpadding="0" cellspacing="0" ng-if="cart.items.length > 0">
         <tr>
             <td>Название</td>
             <td>Категория</td>
@@ -27,4 +28,13 @@
         </tr>
         </tbody>
     </table>
+    <form novalidate ng-submit="createOrder()" ng-show="cart.items.length > 0">
+        <div class="form-group col-md-6">
+            <label for="orderAddress">Адрес доставки</label>
+            <input class="form-control" type="text" ng-model="ord.address" id="orderAddress">
+        </div>
+        <div>
+            <button class="btn btn-primary" type="submit">Оформить заказ</button>
+        </div>
+    </form>
 </div>
